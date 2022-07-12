@@ -38,6 +38,13 @@ public class Node {
             children.remove(idx);
     }
 
+    public void changeNode(String ident, String info){
+        if (ident == id)
+            name = info;
+        for(int i = 0; i < children.size(); i++)
+            children.get(i).changeNode(ident,info);
+    }
+
     //дерево в строку со всеми отступами
     @Override
     public String toString() {
@@ -61,4 +68,39 @@ public class Node {
         }
         return result.toString();
     }
+
+    private String toHtml(Node pos) {
+        if (pos == null) return "";
+        StringBuilder answer = new StringBuilder();
+
+        answer.append("<li>").append(pos.name);
+        if (pos.children == null)
+            return answer.append("</li>").toString();
+
+        answer.append("<ul>");
+        for (Node child : pos.children)
+            answer.append(toHtml(child));
+        answer.append("</ul>");
+        return answer.append("</li>").toString();
+    }
+
+
+    public String printToHtml(Node node) {
+        String res = "<ul>";
+        if (node == null) return "";
+
+        res += "<li>";
+        res += node.name;
+
+        if (node.children == null) {
+            res += "</li>";
+            return res.toString();
+        }
+        res += "<ul>";
+        for (Node child : node.children)
+            res += toHtml(child);
+        res += ("</ul>" + "</li>");
+        return res.toString();
+    }
+
 }
